@@ -1,33 +1,61 @@
 class Chronometer {
   constructor() {
-    // ... your code goes here
+    this.currentTime = 0;
+    this.intervalId = null;
   }
 
   start(printTimeCallback) {
-    // ... your code goes here
+    if (this.intervalId === null) {
+      this.intervalId = setInterval(() => {
+        this.currentTime++;
+        if (printTimeCallback) {
+          printTimeCallback(
+            this.computeTwoDigitNumber(this.getMinutes()),
+            this.computeTwoDigitNumber(this.getSeconds())
+          );
+        }
+      }, 1000); // Update the time every 1000 milliseconds (1 second)
+    }
   }
 
   getMinutes() {
-    // ... your code goes here
+    return Math.floor(this.currentTime / 60);
   }
 
   getSeconds() {
-    // ... your code goes here
+    return Math.floor(this.currentTime);
   }
 
   computeTwoDigitNumber(value) {
-    // ... your code goes here
+    return value < 10 ? '0' + value : String(value);
   }
 
   stop() {
-    // ... your code goes here
+    clearInterval();
+    if (this.intervalId !== null) {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
+    }
   }
 
   reset() {
-    // ... your code goes here
+    this.stop();
+    this.currentTime = 0;
+    this.splits = [];
   }
 
   split() {
-    // ... your code goes here
+    if (this.intervalId !== null) {
+      // Calculate minutes and seconds
+      const minutes = Math.floor(this.currentTime / 60);
+      const seconds = this.currentTime % 60;
+
+      // Format minutes and seconds as "mm:ss"
+      const formattedTime = `${this.computeTwoDigitNumber(
+        minutes
+      )}:${this.computeTwoDigitNumber(seconds)}`;
+      this.splits.push(formattedTime);
+      return formattedTime;
+    }
   }
 }
